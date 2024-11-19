@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Management System - Student</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fc;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center logo and heading */
+            padding-left: 20px;
+            padding-right: 20px;
+            position: relative;
+        }
+        header img {
+       
+            height: 50px;
+            margin-right: 20px; 
+
+        }
+        header h1 {
+            font-size: 24px; /* Adjust size as needed */
+            margin: 0;
+        }
+        nav {
+            text-align: center;
+            margin-top: 20px;
+        }
+        nav a {
+            margin: 0 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        nav a:hover {
+            background-color: #ddd;
+        }
+        .intro-section {
+            padding: 40px;
+            text-align: center;
+        }
+        .intro-section h1 {
+            font-size: 32px;
+            color: #333;
+        }
+        .intro-section p {
+            font-size: 18px;
+            color: #666;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 30px;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        /* Dropdown Menu Styles */
+        .dropdown {
+            display: inline-block;
+            position: relative;
+            margin: 0 10px;
+        }
+        .dropdown button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .dropdown button:hover {
+            background-color: #45a049;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Logo on the left and heading centered together -->
+        <img src="images (1).jpg" alt="Website Logo" width="135px" height="auto">
+        <h1>Welcome to the Internship Management System
+            <br style="font-size: 5px;">
+        </h1>
+        
+    </header>
+
+    <nav>
+        <a href="#apply">Apply for Internships</a>
+        <a href="#profile">Manage Profile</a>
+        <a href="#status">Track Applications</a>
+    </nav>
+
+    <!-- Dropdown Menus -->
+    <div style="text-align: center; margin-top: 30px;">
+        <div class="dropdown">
+            <button>Internship Categories</button>
+            <div class="dropdown-content">
+                <a href="#">Technology</a>
+                <a href="#">Marketing</a>
+                <a href="#">Finance</a>
+                <a href="#">Design</a>
+                <a href="#">Human Resources</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button>Location</button>
+            <div class="dropdown-content">
+                <a href="#">New York</a>
+                <a href="#">Los Angeles</a>
+                <a href="#">San Francisco</a>
+                <a href="#">Remote</a>
+                <a href="#">Chicago</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button>Internship Type</button>
+            <div class="dropdown-content">
+                <a href="#">Full-time</a>
+                <a href="#">Part-time</a>
+                <a href="#">Remote</a>
+                <a href="#">Paid</a>
+                <a href="#">Unpaid</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button>Duration</button>
+            <div class="dropdown-content">
+                <a href="#">1 Month</a>
+                <a href="#">3 Months</a>
+                <a href="#">6 Months</a>
+                <a href="#">1 Year</a>
+            </div>
+        </div>
+
+        <div class="dropdown">
+            <button>Company</button>
+            <div class="dropdown-content">
+                <a href="#">Google</a>
+                <a href="#">Microsoft</a>
+                <a href="#">Amazon</a>
+                <a href="#">Apple</a>
+                <a href="#">Facebook</a>
+            </div>
+        </div>
+    </div>
+
+    <section class="intro-section">
+        <h1>Welcome, Student!</h1>
+        <p>Discover and apply for internship opportunities, manage your profile, and track your applications—all in one place.</p>
+        <a href="#apply" class="button">Start Applying</a>
+    </section>
+
+    <footer>
+        <p style="text-align: center; padding: 20px; background-color: #333; color: white; margin-top: 50px;">&copy; 2024 Internship Management System</p>
+    </footer>
+
+</body>
+</html>
