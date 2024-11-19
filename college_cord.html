@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>College Coordinator Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,18 +16,37 @@
         header {
             background-color: #0077b6;
             color: white;
-            text-align: center;
             padding: 1rem;
+            text-align: center;
         }
         .container {
+            display: flex;
+            flex-direction: column;
             margin: 2rem;
         }
-        .feature {
+        .card {
             background-color: #ffffff;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 1rem;
             margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .communication-center {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button {
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -37,21 +57,59 @@
     </header>
 
     <div class="container">
-        <div class="feature">
-            <h2>Welcome, [Coordinator Name]</h2>
-            <p>Manage student internships and monitor progress with ease.</p>
+
+        <!-- Intern Progress Tracking Dashboard -->
+        <div class="card">
+            <h3>Intern Progress Tracking</h3>
+            <p>Monitor intern submissions, report status, and feedback at a glance.</p>
+            <div id="progress-summary">
+                <!-- Placeholder for dynamic data -->
+                <p><strong>Total Interns:</strong> 120</p>
+                <p><strong>Reports Pending:</strong> 25</p>
+                <p><strong>Verified Reports:</strong> 95</p>
+            </div>
         </div>
 
-        <div class="feature">
-            <h3>Features Placeholder</h3>
-            <ul>
-                <li>Student Monitoring</li>
-                <li>Approval System</li>
-                <li>Generate Reports</li>
-                <li>Communicate with Students & Instructors</li>
-            </ul>
+        <!-- CRUD Operations for Intern Management -->
+        <div class="card">
+            <h3>Intern Management</h3>
+            <button class="button" onclick="openForm('add')">Add Intern</button>
+            <button class="button" onclick="openForm('edit')">Edit Intern</button>
+            <button class="button" onclick="openForm('delete')">Delete Intern</button>
         </div>
+
+        <!-- Report Verification and Review Panel -->
+        <div class="card">
+            <h3>Report Verification</h3>
+            <p>Review submitted reports and approve or request changes.</p>
+            <button class="button">Verify Reports</button>
+        </div>
+
+        <!-- Communication Center -->
+        <div class="card communication-center">
+            <h3>Communication Center</h3>
+            <p>Send messages and announcements to students and mentors.</p>
+            <button class="button" onclick="sendMessage()">Send Message</button>
+        </div>
+
+        <!-- Analytics and Report Generation -->
+        <div class="card">
+            <h3>Analytics and Reports</h3>
+            <p>Generate detailed reports on intern progress and performance metrics.</p>
+            <button class="button">Generate Report</button>
+        </div>
+
     </div>
+
+    <script>
+        function openForm(action) {
+            alert(`Open form for ${action} intern`);
+        }
+        
+        function sendMessage() {
+            alert('Open communication panel');
+        }
+    </script>
 
 </body>
 </html>

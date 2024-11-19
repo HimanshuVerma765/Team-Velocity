@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Mentor Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #0a9396;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            margin: 2rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin-top: 0;
+        }
+        .button {
+            background-color: #0a9396;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Industry Mentor Dashboard</h1>
+    </header>
+
+    <div class="container">
+
+        <!-- Intern List -->
+        <div class="card">
+            <h3>Assigned Interns</h3>
+            <p>View and manage interns under your mentorship.</p>
+            <div id="intern-list">
+                <!-- Placeholder for dynamic data -->
+                <p><strong>Intern Name:</strong> John Doe</p>
+                <p><strong>Status:</strong> Active</p>
+                <button class="button" onclick="viewProgress('John Doe')">View Progress</button>
+            </div>
+        </div>
+
+        <!-- Task Assignment -->
+        <div class="card">
+            <h3>Assign Tasks</h3>
+            <p>Create and assign tasks to interns with deadlines.</p>
+            <button class="button" onclick="openTaskForm()">Assign New Task</button>
+        </div>
+
+        <!-- Evaluation Panel -->
+        <div class="card">
+            <h3>Submit Evaluations</h3>
+            <p>Evaluate interns' performance and submit feedback.</p>
+            <button class="button" onclick="submitEvaluation()">Submit Evaluation</button>
+        </div>
+
+        <!-- Communication with Interns -->
+        <div class="card">
+            <h3>Communication Center</h3>
+            <p>Send messages and provide guidance to interns.</p>
+            <button class="button" onclick="openCommunication()">Send Message</button>
+        </div>
+
+    </div>
+
+    <script>
+        function viewProgress(internName) {
+            alert(`Viewing progress for ${internName}`);
+        }
+
+        function openTaskForm() {
+            alert('Open task assignment form');
+        }
+
+        function submitEvaluation() {
+            alert('Open evaluation form');
+        }
+
+        function openCommunication() {
+            alert('Open communication panel');
+        }
+    </script>
+
+</body>
+</html>
