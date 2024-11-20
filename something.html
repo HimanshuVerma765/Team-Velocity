@@ -57,81 +57,167 @@
                     <textarea id="taskDescription" class="form-control" rows="3" placeholder="Enter task details" required></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="taskDueDate" class="form-label">Due Date:</label>
-                    <input type="date" id="taskDueDate" class="form-control" required>
+                    <label for="taskStartDate" class="form-label">Start Date:</label>
+                    <input type="date" id="taskStartDate" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="taskEndDate" class="form-label">End Date:</label>
+                    <input type="date" id="taskEndDate" class="form-control" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Assign Task</button>
             </form>
         </div>
 
-       <!-- Task List for Mentor -->
-<div class="card p-3 mt-4">
-    <h3>Assigned Tasks</h3>
-    <div id="taskList" class="task-list">
-        <!-- Intern-wise tasks will be dynamically added here -->
+        <!-- Task List for Mentor -->
+        <div class="card p-3 mt-4">
+            <h3>Assigned Tasks</h3>
+            <div id="taskList" class="task-list">
+                <!-- Intern-wise tasks will be dynamically added here -->
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-    // Dummy data for intern tasks (this would be your existing task data)
-    let internTasks = JSON.parse(localStorage.getItem('internTasks')) || {
-        1: [
-            { name: 'Report Submission', description: 'Submit the first report', dueDate: '2024-11-25', status: 'Pending', file: null },
-            { name: 'Midterm Review', description: 'Submit the midterm review', dueDate: '2024-12-01', status: 'Pending', file: null }
-        ],
-        2: [
-            { name: 'Initial Report', description: 'Submit the initial report', dueDate: '2024-11-20', status: 'Pending', file: null }
-        ],
-        3: [
-            { name: 'Final Submission', description: 'Submit the final assignment', dueDate: '2024-12-10', status: 'Pending', file: null }
-        ]
-    };
+    <script>
+        // Dummy data for intern tasks (initially empty)
+        let internTasks = JSON.parse(localStorage.getItem('internTasks')) || {
+            1: [],
+            2: [],
+            3: []
+        };
 
-    // Function to display tasks for the mentor
-    function updateTaskList() {
-        const taskList = $('#taskList');
-        taskList.empty(); // Clear existing tasks
+        // Handle form submission for task assignment
+        $('#taskForm').on('submit', function(event) {
+            event.preventDefault();
 
-        // Loop through all interns and their tasks
-        for (let internId in internTasks) {
-            const tasks = internTasks[internId];
-            if (tasks.length > 0) {
-                taskList.append(`
-                    <div class="intern-tasks">
-                        <h5>Tasks for ${getInternName(internId)}</h5>
-                        <div class="list-group">
-                            ${tasks.map((task, index) => {
-                                return `
-                                    <div class="list-group-item task-list-item">
-                                        <h6>${task.name}</h6>
-                                        <p>${task.description}</p>
-                                        <small>Due: ${task.dueDate} | Status: ${task.status}</small>
-                                        <br>
-                                        ${task.status === 'Completed' && task.file ? 
-                                            `<a href="${task.file}" target="_blank" class="btn btn-info btn-sm mt-2">View File</a>` : 
-                                            `<button class="btn btn-warning btn-sm mt-2" disabled>No file uploaded yet</button>`}
-                                    </div>
-                                `;
-                            }).join('')}
+            // Get form values
+            const internId = $('#internSelect').val();
+            const taskName = $('#taskName').val();
+            const taskDescription = $('#taskDescription').val();
+            const taskStartDate = $('#taskStartDate').val();
+            const taskEndDate = $('#taskEndDate').val();
+
+            // Create task object
+            const newTask = {
+                name: taskName,
+                description: taskDescription,
+                startDate: taskStartDate,
+                endDate: taskEndDate,
+                status: 'Pending',
+                fileUploaded: false,
+                fileName: '',
+                fileData: ''
+            };
+
+            // Add task to the appropriate intern's task list
+            if (!internTasks[internId]) {
+                internTasks[internId] = [];
+            }
+            internTasks[internId].push(newTask);
+
+            // Store updated task list in localStorage
+            localStorage.setItem('internTasks', JSON.stringify(internTasks));
+
+            // Clear form fields
+            $('#taskForm')[0].reset();
+
+            // Update Mentor Task List
+            updateTaskList();
+        });
+
+        // Update task list for Mentor Dashboard
+        function updateTaskList() {
+            const taskList = $('#taskList');
+            taskList.empty(); // Clear existing list
+
+            // Loop through all interns and display their tasks
+            for (let internId in internTasks) {
+                const tasks = internTasks[internId];
+                if (tasks.length > 0) {
+                    taskList.append(`
+                        <div class="intern-tasks">
+                            <h5>Tasks for ${getInternName(internId)}</h5>
+                            <div class="list-group">
+                                ${tasks.map((task, index) => {
+                                    return `
+                                        <div class="list-group-item task-list-item">
+                                            <h6>${task.name}</h6>
+                                            <p>${task.description}</p>
+                                            <small>Start: ${task.startDate} | End: ${task.endDate} | Status: ${task.status}</small>
+                                            <br>
+                                            <button class="btn btn-danger btn-sm mt-2" onclick="removeTask(${internId}, ${index})">Remove Task</button>
+                                            <br>
+                                            ${task.fileUploaded ?
+                                                `<a href="#" class="btn btn-info btn-sm mt-2" onclick="downloadFile(${internId}, ${index})">Download File</a>` :
+                                                `<input type="file" class="form-control mt-2" onchange="uploadFile(event, ${internId}, ${index})">`}
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
                         </div>
-                    </div>
-                `);
+                    `);
+                }
             }
         }
-    }
 
-    // Get intern name by intern ID
-    function getInternName(internId) {
-        const internNames = {
-            1: 'John Doe',
-            2: 'Jane Smith',
-            3: 'Michael Lee'
-        };
-        return internNames[internId];
-    }
+        // Remove task from the task list
+        function removeTask(internId, taskIndex) {
+            // Remove the task from the intern's task list
+            internTasks[internId].splice(taskIndex, 1);
 
-    // Initial update for Mentor Dashboard
-    updateTaskList();
-</script>
+            // Store updated task list in localStorage
+            localStorage.setItem('internTasks', JSON.stringify(internTasks));
+
+            // Update the task list UI
+            updateTaskList();
+        }
+
+        // Get intern name by intern ID
+        function getInternName(internId) {
+            const internNames = {
+                1: 'John Doe',
+                2: 'Jane Smith',
+                3: 'Michael Lee'
+            };
+            return internNames[internId];
+        }
+
+        // Function to upload file
+        function uploadFile(event, internId, taskIndex) {
+            const file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                
+                // Convert the file to a base64 string (simulating file upload)
+                reader.onloadend = function() {
+                    let internTasks = JSON.parse(localStorage.getItem('internTasks'));
+                    internTasks[internId][taskIndex].fileUploaded = true;
+                    internTasks[internId][taskIndex].fileData = reader.result; // Store the file as base64 string
+                    internTasks[internId][taskIndex].fileName = file.name;  // Store the file name
+                    localStorage.setItem('internTasks', JSON.stringify(internTasks));
+
+                    // Refresh task list
+                    updateTaskList();
+                };
+
+                // Read the file as a data URL
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Function to download file
+        function downloadFile(internId, taskIndex) {
+            const fileData = internTasks[internId][taskIndex].fileData;
+            const fileName = internTasks[internId][taskIndex].fileName;
+
+            // Create a temporary link element for downloading the file
+            const link = document.createElement('a');
+            link.href = fileData;
+            link.download = fileName;
+            link.click();
+        }
+
+        // Initial update for Mentor Dashboard
+        updateTaskList();
+    </script>
 </body>
 </html>

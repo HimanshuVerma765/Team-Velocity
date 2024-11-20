@@ -24,7 +24,7 @@
 
     <script>
         // Dummy intern ID (simulating logged-in intern)
-        const internId = 2;  // Assume intern with ID 2 is logged in
+        const internId = 1;  // Assume intern with ID 2 is logged in
         
         // Dummy task data stored in localStorage (for simulation)
         if (!localStorage.getItem('internTasks')) {
@@ -121,6 +121,28 @@
 
         // Initial call to display tasks for the logged-in intern
         displayTasks(internId);
+         // Function to simulate file upload and store file as base64
+    function uploadFile(event, internId, taskIndex) {
+        const file = event.target.files[0];
+        if (file) {
+            let reader = new FileReader();
+            
+            // Convert the file to a base64 string (simulating file upload)
+            reader.onloadend = function() {
+                let internTasks = JSON.parse(localStorage.getItem('internTasks'));
+                internTasks[internId][taskIndex].fileUploaded = true;
+                internTasks[internId][taskIndex].fileData = reader.result; // Store the file as base64 string
+                internTasks[internId][taskIndex].fileName = file.name;  // Store the file name
+                localStorage.setItem('internTasks', JSON.stringify(internTasks));
+
+                // Refresh task list
+                displayTasks(internId); 
+            };
+
+            // Read the file as a data URL
+            reader.readAsDataURL(file);
+        }
+    }
     </script>
 </body>
 </html>
