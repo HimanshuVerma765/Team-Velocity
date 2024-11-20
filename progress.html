@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible=" IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intern Progress Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        header {
+            background-color: #0a9396;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .container {
+            margin: 2rem;
+        }
+
+        .chart-container {
+            width: 500px;
+            margin: auto;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-list,
+        .milestone-list {
+            margin-top: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0a9396;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Intern Progress Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <!-- Summary -->
+        <div class="card summary">
+            <h3 id="internName">Internship Task Summary for [Intern Name]</h3>
+            <p><strong>Completion Percentage:</strong> <span id="completionPercentage">70%</span></p>
+            <p><strong>Tasks Remaining:</strong> <span id="remainingPercentage">30%</span></p>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="chart-container card">
+            <canvas id="progressChart"></canvas>
+        </div>
+
+        <!-- Line Chart -->
+        <div class="chart-container card">
+            <h3>Progress Over Time</h3>
+            <canvas id="lineChart"></canvas>
+        </div>
+
+        
+        <!-- Task Breakdown Table -->
+        <div class="card task-list">
+            <h3>Task Breakdown</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="taskTable">
+                    <!-- Placeholder for tasks -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Milestones -->
+        <div class="card milestone-list">
+            <h3>Achievements and Milestones</h3>
+            <ul id="milestoneList">
+                <!-- Placeholder for milestones -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Parse the query parameter from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const internId = urlParams.get('id');
+
+        // Dummy data for intern progress
+        const internData = {
+            1: {
+                name: 'John Doe',
+                completed: 70,
+                remaining: 30,
+                progressHistory: [20, 30, 50, 70],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-10', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-05', status: 'Completed' },
+                    { name: 'Final Submission', dueDate: '2024-12-20', status: 'Pending' }
+                ],
+                milestones: ['Completed initial setup', 'Passed midterm review']
+            },
+            2: {
+                name: 'Jane Smith',
+                completed: 85,
+                remaining: 15,
+                progressHistory: [30, 50, 70, 85],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-12', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-10', status: 'Completed' },
+                    { name: 'Final Submission', dueDate: '2024-12-25', status: 'Pending' }
+                ],
+                milestones: ['Completed initial report', 'Exemplary midterm performance']
+            },
+            3: {
+                name: 'Michael Lee',
+                completed: 60,
+                remaining: 40,
+                progressHistory: [10, 30, 50, 60],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-15', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-15', status: 'Pending' },
+                    { name: 'Final Submission', dueDate: '2024-12-30', status: 'Pending' }
+                ],
+                milestones: ['Completed initial report', 'Started midterm review']
+            },
+            4: {
+                name: 'Sarah Johnson',
+                completed: 90,
+                remaining: 10,
+                progressHistory: [40, 60, 80, 90],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-05', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-01', status: 'Completed' },
+                    { name: 'Final Submission', dueDate: '2024-12-15', status: 'Pending' }
+                ],
+                milestones: ['Excellent initial report', 'Commended midterm review']
+            },
+            5: {
+                name: 'Emma Brown',
+                completed: 75,
+                remaining: 25,
+                progressHistory: [15, 35, 65, 75],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-20', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-20', status: 'Completed' },
+                    { name: 'Final Submission', dueDate: '2024-12-22', status: 'Pending' }
+                ],
+                milestones: ['Completed early reports', 'Received positive feedback']
+            },
+            6: {
+                name: 'David Wilson',
+                completed: 50,
+                remaining: 50,
+                progressHistory: [10, 20, 35, 50],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-18', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-15', status: 'Pending' },
+                    { name: 'Final Submission', dueDate: '2024-12-28', status: 'Pending' }
+                ],
+                milestones: ['First report approved', 'Started industry project']
+            },
+            7: {
+                name: 'Sophia Martinez',
+                completed: 95,
+                remaining: 5,
+                progressHistory: [45, 65, 85, 95],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-02', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-07', status: 'Completed' },
+                    { name: 'Final Submission', dueDate: '2024-12-12', status: 'Pending' }
+                ],
+                milestones: ['Top performer in initial phase', 'Mentor commendation']
+            },
+            8: {
+                name: 'Oliver Davis',
+                completed: 40,
+                remaining: 60,
+                progressHistory: [10, 20, 30, 40],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-25', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-25', status: 'Pending' },
+                    { name: 'Final Submission', dueDate: '2024-12-29', status: 'Pending' }
+                ],
+                milestones: ['Initial feedback received', 'Awaiting midterm']
+            },
+            9: {
+                name: 'Lucas Garcia',
+                completed: 80,
+                remaining: 20,
+                progressHistory: [20, 50, 70, 80],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-08', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-08', status: 'Completed' },
+                    { name: 'Final Submission', dueDate: '2024-12-18', status: 'Pending' }
+                ],
+                milestones: ['Progress noted in review', 'Solid project work']
+            },
+            10: {
+                name: 'Mia Clark',
+                completed: 65,
+                remaining: 35,
+                progressHistory: [15, 30, 50, 65],
+                tasks: [
+                    { name: 'Initial Report', dueDate: '2024-10-13', status: 'Completed' },
+                    { name: 'Midterm Review', dueDate: '2024-11-12', status: 'Completed' },
+                    { name: 'Final Submission', dueDate: '2024-12-24', status: 'Pending' }
+                ],
+                milestones: ['Initial evaluation met', 'Improvements after feedback']
+            }
+            // Add data for more interns as needed
+        };
+
+        // Get the data for the specific intern
+        const intern = internData[internId];
+        if (intern) {
+            document.getElementById('internName').textContent = `Internship Task Summary for ${intern.name}`;
+            document.getElementById('completionPercentage').textContent = `${intern.completed}%`;
+            document.getElementById('remainingPercentage').textContent = `${intern.remaining}%`;
+
+            // Render the pie chart
+            const ctx = document.getElementById('progressChart').getContext('2d');
+            const progressChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Completed Tasks', 'Remaining Tasks'],
+                    datasets: [{
+                        data: [intern.completed, intern.remaining],
+                        backgroundColor: ['#0a9396', '#94d2bd'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Render the line chart for progress over time
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Progress Over Time',
+                        data: intern.progressHistory,
+                        backgroundColor: 'rgba(10, 147, 150, 0.2)',
+                        borderColor: '#0a9396',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { title: { display: true, text: 'Weeks' } },
+                        y: { title: { display: true, text: 'Progress (%)' }, min: 0, max: 100 }
+                    }
+                }
+            });
+
+            // Render tasks in the table
+            const taskTable = document.getElementById('taskTable');
+            intern.tasks.forEach(task => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${task.name}</td><td>${task.dueDate}</td><td>${task.status}</td>`;
+                taskTable.appendChild(row);
+            });
+
+            // Render milestones
+            const milestoneList = document.getElementById('milestoneList');
+            intern.milestones.forEach(milestone => {
+                const li = document.createElement('li');
+                li.textContent = milestone;
+                milestoneList.appendChild(li);
+            });
+        }
+        else {
+            document.body.innerHTML = '<p style="text-align: center;">Intern data not found.</p>';
+        }
+    </script>
+
+</body>
+
+</html>

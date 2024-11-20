@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Mentor Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .task-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .intern-tasks {
+            margin-top: 20px;
+        }
+        .intern-tasks h5 {
+            color: #007bff;
+        }
+        .task-list-item {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Industry Mentor Dashboard</h1>
+
+        <!-- Interns List -->
+        <div class="card p-3">
+            <h3>Interns List</h3>
+            <ul id="internList" class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center" data-intern-id="1">John Doe</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center" data-intern-id="2">Jane Smith</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center" data-intern-id="3">Michael Lee</li>
+            </ul>
+        </div>
+
+        <!-- Task Assignment Form -->
+        <div class="card p-3 mt-4">
+            <h3>Assign Task</h3>
+            <form id="taskForm">
+                <div class="mb-3">
+                    <label for="internSelect" class="form-label">Select Intern:</label>
+                    <select id="internSelect" class="form-select" required>
+                        <option value="1">John Doe</option>
+                        <option value="2">Jane Smith</option>
+                        <option value="3">Michael Lee</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="taskName" class="form-label">Task Name:</label>
+                    <input type="text" id="taskName" class="form-control" placeholder="Enter task name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="taskDescription" class="form-label">Task Description:</label>
+                    <textarea id="taskDescription" class="form-control" rows="3" placeholder="Enter task details" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="taskDueDate" class="form-label">Due Date:</label>
+                    <input type="date" id="taskDueDate" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Assign Task</button>
+            </form>
+        </div>
+
+       <!-- Task List for Mentor -->
+<div class="card p-3 mt-4">
+    <h3>Assigned Tasks</h3>
+    <div id="taskList" class="task-list">
+        <!-- Intern-wise tasks will be dynamically added here -->
+    </div>
+</div>
+
+<script>
+    // Dummy data for intern tasks (this would be your existing task data)
+    let internTasks = JSON.parse(localStorage.getItem('internTasks')) || {
+        1: [
+            { name: 'Report Submission', description: 'Submit the first report', dueDate: '2024-11-25', status: 'Pending', file: null },
+            { name: 'Midterm Review', description: 'Submit the midterm review', dueDate: '2024-12-01', status: 'Pending', file: null }
+        ],
+        2: [
+            { name: 'Initial Report', description: 'Submit the initial report', dueDate: '2024-11-20', status: 'Pending', file: null }
+        ],
+        3: [
+            { name: 'Final Submission', description: 'Submit the final assignment', dueDate: '2024-12-10', status: 'Pending', file: null }
+        ]
+    };
+
+    // Function to display tasks for the mentor
+    function updateTaskList() {
+        const taskList = $('#taskList');
+        taskList.empty(); // Clear existing tasks
+
+        // Loop through all interns and their tasks
+        for (let internId in internTasks) {
+            const tasks = internTasks[internId];
+            if (tasks.length > 0) {
+                taskList.append(`
+                    <div class="intern-tasks">
+                        <h5>Tasks for ${getInternName(internId)}</h5>
+                        <div class="list-group">
+                            ${tasks.map((task, index) => {
+                                return `
+                                    <div class="list-group-item task-list-item">
+                                        <h6>${task.name}</h6>
+                                        <p>${task.description}</p>
+                                        <small>Due: ${task.dueDate} | Status: ${task.status}</small>
+                                        <br>
+                                        ${task.status === 'Completed' && task.file ? 
+                                            `<a href="${task.file}" target="_blank" class="btn btn-info btn-sm mt-2">View File</a>` : 
+                                            `<button class="btn btn-warning btn-sm mt-2" disabled>No file uploaded yet</button>`}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `);
+            }
+        }
+    }
+
+    // Get intern name by intern ID
+    function getInternName(internId) {
+        const internNames = {
+            1: 'John Doe',
+            2: 'Jane Smith',
+            3: 'Michael Lee'
+        };
+        return internNames[internId];
+    }
+
+    // Initial update for Mentor Dashboard
+    updateTaskList();
+</script>
+</body>
+</html>

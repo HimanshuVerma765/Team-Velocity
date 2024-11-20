@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible=" IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Industry Mentor Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,15 +15,18 @@
             padding: 0;
             background-color: #f4f4f9;
         }
+
         header {
             background-color: #0a9396;
             color: white;
             padding: 1rem;
             text-align: center;
         }
+
         .container {
             margin: 2rem;
         }
+
         .card {
             background-color: #ffffff;
             border: 1px solid #ddd;
@@ -30,9 +35,7 @@
             margin-bottom: 1rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .card h3 {
-            margin-top: 0;
-        }
+
         .button {
             background-color: #0a9396;
             color: white;
@@ -40,10 +43,52 @@
             padding: 0.5rem 1rem;
             border-radius: 5px;
             cursor: pointer;
+            text-decoration: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 1rem;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0a9396;
+            color: white;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .task-card {
+            border-left: 4px solid #0d6efd;
+            background-color: #f8f9fa;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-list {
+            max-height: 300px;
+            overflow-y: auto;
         }
     </style>
 </head>
+
 <body>
 
     <header>
@@ -51,59 +96,150 @@
     </header>
 
     <div class="container">
+        <h2>Intern List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Intern Name</th>
+                    <th>Status</th>
+                    <th>View Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <script>
+                    // Dummy data for 10 interns
+                    const interns = [
+                        { name: 'John Doe', status: 'Active', id: 1 },
+                        { name: 'Jane Smith', status: 'Active', id: 2 },
+                        { name: 'Mark Johnson', status: 'On Hold', id: 3 },
+                        { name: 'Emily Davis', status: 'Active', id: 4 },
+                        { name: 'Chris Brown', status: 'Completed', id: 5 },
+                        { name: 'Lisa White', status: 'Active', id: 6 },
+                        { name: 'David Miller', status: 'On Hold', id: 7 },
+                        { name: 'Sarah Wilson', status: 'Active', id: 8 },
+                        { name: 'Michael Lee', status: 'Completed', id: 9 },
+                        { name: 'Anna Scott', status: 'Active', id: 10 }
+                    ];
 
-        <!-- Intern List -->
-        <div class="card">
-            <h3>Assigned Interns</h3>
-            <p>View and manage interns under your mentorship.</p>
-            <div id="intern-list">
-                <!-- Placeholder for dynamic data -->
-                <p><strong>Intern Name:</strong> John Doe</p>
-                <p><strong>Status:</strong> Active</p>
-                <button class="button" onclick="viewProgress('John Doe')">View Progress</button>
-            </div>
-        </div>
-
-        <!-- Task Assignment -->
-        <div class="card">
-            <h3>Assign Tasks</h3>
-            <p>Create and assign tasks to interns with deadlines.</p>
-            <button class="button" onclick="openTaskForm()">Assign New Task</button>
-        </div>
-
-        <!-- Evaluation Panel -->
-        <div class="card">
-            <h3>Submit Evaluations</h3>
-            <p>Evaluate interns' performance and submit feedback.</p>
-            <button class="button" onclick="submitEvaluation()">Submit Evaluation</button>
-        </div>
-
-        <!-- Communication with Interns -->
-        <div class="card">
-            <h3>Communication Center</h3>
-            <p>Send messages and provide guidance to interns.</p>
-            <button class="button" onclick="openCommunication()">Send Message</button>
-        </div>
-
+                    // Generate table rows dynamically
+                    document.write(
+                        interns.map(intern => `
+                            <tr>
+                                <td>${intern.name}</td>
+                                <td>${intern.status}</td>
+                                <td><a href="progress.html?id=${intern.id}" class="button">View Progress</a></td>
+                            </tr>
+                        `).join('')
+                    );
+                </script>
+            </tbody>
+        </table>
     </div>
 
-    <script>
-        function viewProgress(internName) {
-            alert(`Viewing progress for ${internName}`);
-        }
+    <!-- Task Assignment Form -->
+    <div class="form-container mt-4">
+        <h2>Assign Tasks to Interns</h2>
+        <form id="taskForm" class="mt-3">
+            <div class="mb-3">
+                <label for="internSelect" class="form-label">Select Intern:</label>
+                <select id="internSelect" class="form-select" required>
+                    <option value="1">John Doe</option>
+                    <option value="2">Jane Smith</option>
+                    <option value="3">Michael Lee</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="taskName" class="form-label">Task Name:</label>
+                <input type="text" id="taskName" class="form-control" placeholder="Enter task name" required>
+            </div>
+            <div class="mb-3">
+                <label for="taskDescription" class="form-label">Task Description:</label>
+                <textarea id="taskDescription" class="form-control" rows="3" placeholder="Enter task details" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="taskDueDate" class="form-label">Due Date:</label>
+                <input type="date" id="taskDueDate" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Add Task</button>
+        </form>
+    </div>
 
-        function openTaskForm() {
-            alert('Open task assignment form');
-        }
+    <!-- Task List -->
+    <div class="alert alert-success" role="alert" id="successMessage">Task assigned successfully!</div>
 
-        function submitEvaluation() {
-            alert('Open evaluation form');
-        }
+    <div class="card p-3 mt-4">
+        <h3>Assigned Tasks</h3>
+        <div id="taskList" class="task-list list-group">
+            <!-- Tasks will be dynamically added here -->
+        </div>
+    </div>
+</div>
 
-        function openCommunication() {
-            alert('Open communication panel');
-        }
-    </script>
+<script>
+    // Dummy data for interns and their tasks
+    const internTasks = {
+        1: [],
+        2: [],
+        3: []
+    };
+
+    // Handle form submission for task assignment
+    $('#taskForm').on('submit', function(event) {
+        event.preventDefault();
+
+        // Get form values
+        const internId = $('#internSelect').val();
+        const taskName = $('#taskName').val();
+        const taskDescription = $('#taskDescription').val();
+        const taskDueDate = $('#taskDueDate').val();
+
+        // Create task object
+        const newTask = {
+            name: taskName,
+            description: taskDescription,
+            dueDate: taskDueDate,
+            status: 'Pending'
+        };
+
+        // Add task to the appropriate intern's task list
+        internTasks[internId].push(newTask);
+
+        // Clear the form fields
+        $('#taskForm')[0].reset();
+
+        // Update task list for the assigned intern
+        updateTaskList(internId);
+
+        // Show success message
+        $('#successMessage').fadeIn().delay(3000).fadeOut();
+    });
+
+    // Function to update the task list display for a specific intern
+    function updateTaskList(internId) {
+        const taskList = $('#taskList');
+        taskList.empty(); // Clear existing list
+
+        internTasks[internId].forEach((task) => {
+            taskList.append(`
+                <div class="list-group-item task-card mb-2">
+                    <h5>${task.name}</h5>
+                    <p>${task.description}</p>
+                    <small>Due Date: ${task.dueDate} | Status: ${task.status}</small>
+                </div>
+            `);
+        });
+    }
+
+    // Update task list for the first intern on page load
+    updateTaskList(1);
+
+    // Click event for intern list to show the tasks for the selected intern
+    $('#internList').on('click', 'li', function() {
+        const internId = $(this).data('intern-id');
+        updateTaskList(internId);
+    });
+</script>
 
 </body>
+
 </html>

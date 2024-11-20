@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intern Task Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .task-card {
+            margin-bottom: 15px;
+        }
+        .task-status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Intern Task Dashboard</h1>
+        
+        <div id="taskList"></div>
+    </div>
+
+    <script>
+        // Dummy intern ID (simulating logged-in intern)
+        const internId = 2;  // Assume intern with ID 2 is logged in
+        
+        // Dummy task data stored in localStorage (for simulation)
+        if (!localStorage.getItem('internTasks')) {
+            let internTasks = {
+                1: [
+                    {
+                        name: 'Task 1 - Report Writing',
+                        description: 'Write a detailed report on your work progress.',
+                        dueDate: '2024-11-30',
+                        status: 'Pending',
+                        fileUploaded: false
+                    },
+                    {
+                        name: 'Task 2 - Research Paper',
+                        description: 'Prepare a research paper on current industry trends.',
+                        dueDate: '2024-12-10',
+                        status: 'Pending',
+                        fileUploaded: false
+                    }
+                ],
+                2: [
+                    {
+                        name: 'Task 1 - Data Analysis',
+                        description: 'Perform data analysis on recent market trends.',
+                        dueDate: '2024-12-01',
+                        status: 'Pending',
+                        fileUploaded: false
+                    }
+                ]
+            };
+            localStorage.setItem('internTasks', JSON.stringify(internTasks));
+        }
+
+        // Get tasks for the logged-in intern
+        function getTasksForIntern(internId) {
+            const internTasks = JSON.parse(localStorage.getItem('internTasks'));
+            return internTasks[internId] || [];
+        }
+
+        // Function to display the tasks for the specific intern
+        function displayTasks(internId) {
+            const taskList = $('#taskList');
+            taskList.empty();  // Clear any existing task list
+
+            const tasks = getTasksForIntern(internId);
+            
+            if (tasks.length === 0) {
+                taskList.append('<p>No tasks assigned yet.</p>');
+            } else {
+                tasks.forEach((task, index) => {
+                    let taskHtml = `
+                        <div class="card task-card">
+                            <div class="card-body">
+                                <h5 class="card-title">${task.name}</h5>
+                                <p class="card-text">${task.description}</p>
+                                <p><strong>Due Date:</strong> ${task.dueDate}</p>
+                                <p><strong>Status:</strong> <span class="task-status">${task.status}</span></p>
+                                
+                                <div class="d-flex justify-content-between">
+                                    ${task.status === 'Pending' ? 
+                                        `<button class="btn btn-primary" onclick="submitTask(${internId}, ${index})">Submit Task</button>` : ''}
+                                    ${task.fileUploaded ? 
+                                        `<button class="btn btn-success" disabled>File Uploaded</button>` :
+                                        `<input type="file" class="form-control" onchange="uploadFile(event, ${internId}, ${index})">`}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    taskList.append(taskHtml);
+                });
+            }
+        }
+
+        // Function to simulate task submission (changing task status to 'Completed')
+        function submitTask(internId, taskIndex) {
+            let internTasks = JSON.parse(localStorage.getItem('internTasks'));
+            internTasks[internId][taskIndex].status = 'Completed';
+            localStorage.setItem('internTasks', JSON.stringify(internTasks));
+            displayTasks(internId);  // Refresh task list to show updated status
+        }
+
+        // Function to simulate file upload
+        function uploadFile(event, internId, taskIndex) {
+            const file = event.target.files[0];
+            if (file) {
+                let internTasks = JSON.parse(localStorage.getItem('internTasks'));
+                internTasks[internId][taskIndex].fileUploaded = true;
+                // Store the file name or a URL (here we simulate the file upload with a simple name)
+                internTasks[internId][taskIndex].fileName = file.name;
+                localStorage.setItem('internTasks', JSON.stringify(internTasks));
+                displayTasks(internId);  // Refresh task list to show file uploaded status
+            }
+        }
+
+        // Initial call to display tasks for the logged-in intern
+        displayTasks(internId);
+    </script>
+</body>
+</html>

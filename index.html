@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -44,5 +44,111 @@
 
     </div>
 </form>  
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Mentor Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #0a9396;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            margin: 2rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .button {
+            background-color: #0a9396;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        th {
+            background-color: #0a9396;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Industry Mentor Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <h2>Intern List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Intern Name</th>
+                    <th>Status</th>
+                    <th>View Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                <script>
+                    // Dummy data for 10 interns
+                    const interns = [
+                        { name: 'John Doe', status: 'Active', id: 1 },
+                        { name: 'Jane Smith', status: 'Active', id: 2 },
+                        { name: 'Mark Johnson', status: 'On Hold', id: 3 },
+                        { name: 'Emily Davis', status: 'Active', id: 4 },
+                        { name: 'Chris Brown', status: 'Completed', id: 5 },
+                        { name: 'Lisa White', status: 'Active', id: 6 },
+                        { name: 'David Miller', status: 'On Hold', id: 7 },
+                        { name: 'Sarah Wilson', status: 'Active', id: 8 },
+                        { name: 'Michael Lee', status: 'Completed', id: 9 },
+                        { name: 'Anna Scott', status: 'Active', id: 10 }
+                    ];
+
+                    // Generate table rows dynamically
+                    document.write(
+                        interns.map(intern => `
+                            <tr>
+                                <td>${intern.name}</td>
+                                <td>${intern.status}</td>
+                                <td><a href="progress.html?id=${intern.id}" class="button">View Progress</a></td>
+                            </tr>
+                        `).join('')
+                    );
+                </script>
+            </tbody>
+        </table>
+    </div>
+
 </body>
 </html>
