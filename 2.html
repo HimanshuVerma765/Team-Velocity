@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intern Task Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .chat-window {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 20px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            z-index: 1000;
+        }
+        .chat-messages {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 5px;
+            background-color: #fff;
+            border-radius: 4px;
+        }
+        .chat-messages div {
+            margin-bottom: 5px;
+        }
+        .chat-messages .mentor {
+            text-align: right;
+            color: blue;
+        }
+        .chat-messages .intern {
+            text-align: left;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Intern Task Dashboard</h1>
+        
+        <div id="taskList"></div>
+        <button class="btn btn-primary mt-4" onclick="openChatWindow()">Open Chat with Mentor</button>
+
+        <!-- Chat Window -->
+        <div id="chatWindow" class="chat-window">
+            <h5>Chat with Mentor</h5>
+            <div id="chatMessages" class="chat-messages"></div>
+            <input type="text" id="chatInput" class="form-control mb-2" placeholder="Type a message...">
+            <button class="btn btn-success w-100" onclick="sendMessage('intern')">Send</button>
+            <button class="btn btn-danger mt-2 w-100" onclick="closeChatWindow()">Close Chat</button>
+        </div>
+    </div>
+
+    <script>
+        const internId = 1;  // Assume the logged-in intern has ID 1
+
+        function openChatWindow() {
+            const chatWindow = $('#chatWindow');
+            chatWindow.show();
+            loadMessages(internId);
+        }
+
+        function closeChatWindow() {
+            $('#chatWindow').hide();
+            $('#chatMessages').empty();
+        }
+
+        function loadMessages(internId) {
+            const chatMessagesContainer = $('#chatMessages');
+            chatMessagesContainer.empty();
+
+            const chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || {};
+            const messages = chatHistory[internId] || [];
+
+            messages.forEach(msg => {
+                const messageDiv = `<div class="${msg.sender}">${msg.sender === 'mentor' ? 'Mentor' : 'Intern'}: ${msg.text}</div>`;
+                chatMessagesContainer.append(messageDiv);
+            });
+        }
+
+        function sendMessage(sender) {
+            const chatInput = $('#chatInput');
+            const text = chatInput.val().trim();
+            const internId = 1;  // Replace with dynamic intern ID if needed
+
+            if (text) {
+                const chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || {};
+                if (!chatHistory[internId]) {
+                    chatHistory[internId] = [];
+                }
+
+                chatHistory[internId].push({ sender, text });
+                localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+
+                $('#chatMessages').append(`<div class="${sender}">${sender === 'mentor' ? 'Mentor' : 'Intern'}: ${text}</div>`);
+                chatInput.val('');
+            }
+        }
+
+        // Automatically load messages when the page is loaded
+        loadMessages(internId);
+    </script>
+</body>
+</html>
